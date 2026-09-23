@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QR Code Studio Pro - Tạo & Tùy Biến Mã QR Chuyên Nghiệp</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+    <link rel="stylesheet" href="qr_code.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="logo-box">
+            <div class="logo-icon">⚡</div>
+            <div class="logo-text">
+                <h1>QR Studio Pro</h1>
+                <p>Trình tạo & tùy biến mã QR cao cấp</p>
+            </div>
+        </div>
+        <div class="badge-pro">Phiên bản 2.0 Pro</div>
+    </header>
+
+    <!-- Main Studio -->
+    <main class="studio-container">
+        
+        <!-- Left: Configuration & Design Area -->
+        <div class="panel">
+            
+            <!-- 1. Content Type Selector -->
+            <div>
+                <div class="section-header" style="margin-bottom: 14px;">
+                    <div class="section-title">
+                        <span>🎯</span> Chọn loại nội dung QR
+                    </div>
+                </div>
+                <div class="type-tabs">
+                    <button class="tab-btn active" onclick="switchType('url')">
+                        <span class="tab-icon">🔗</span>
+                        <span>Liên kết / URL</span>
+                    </button>
+                    <button class="tab-btn" onclick="switchType('wifi')">
+                        <span class="tab-icon">📶</span>
+                        <span>Mạng Wi-Fi</span>
+                    </button>
+                    <button class="tab-btn" onclick="switchType('vcard')">
+                        <span class="tab-icon">👤</span>
+                        <span>Danh thiếp vCard</span>
+                    </button>
+                    <button class="tab-btn" onclick="switchType('vietqr')">
+                        <span class="tab-icon">💳</span>
+                        <span>Chuyển khoản / VietQR</span>
+                    </button>
+                    <button class="tab-btn" onclick="switchType('text')">
+                        <span class="tab-icon">📝</span>
+                        <span>Văn bản</span>
+                    </button>
+                    <button class="tab-btn" onclick="switchType('email')">
+                        <span class="tab-icon">✉️</span>
+                        <span>Email</span>
+                    </button>
+                    <button class="tab-btn" onclick="switchType('phone')">
+                        <span class="tab-icon">📱</span>
+                        <span>SĐT / SMS</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 2. Dynamic Input Fields -->
+            <div class="sub-card" id="form-container">
+                <!-- Content will be injected by JS based on active tab -->
+            </div>
+
+            <!-- 3. Themes & Quick Presets -->
+            <div>
+                <div class="section-header" style="margin-bottom: 14px;">
+                    <div class="section-title">
+                        <span>🎨</span> Phong cách mẫu (Quick Themes)
+                    </div>
+                </div>
+                <div class="theme-presets">
+                    <div class="preset-card active" onclick="applyTheme('modern-indigo')">
+                        <div class="preset-preview" style="background: linear-gradient(135deg, #4f46e5, #9333ea);"></div>
+                        <span class="preset-name">Tím Gradient</span>
+                    </div>
+                    <div class="preset-card" onclick="applyTheme('ocean-cyan')">
+                        <div class="preset-preview" style="background: linear-gradient(135deg, #0ea5e9, #10b981);"></div>
+                        <span class="preset-name">Đại Dương</span>
+                    </div>
+                    <div class="preset-card" onclick="applyTheme('sunset-fire')">
+                        <div class="preset-preview" style="background: linear-gradient(135deg, #f97316, #ef4444);"></div>
+                        <span class="preset-name">Hoàng Hôn</span>
+                    </div>
+                    <div class="preset-card" onclick="applyTheme('emerald-pro')">
+                        <div class="preset-preview" style="background: #059669;"></div>
+                        <span class="preset-name">Ngọc Lục Bảo</span>
+                    </div>
+                    <div class="preset-card" onclick="applyTheme('classic-dark')">
+                        <div class="preset-preview" style="background: #0f172a;"></div>
+                        <span class="preset-name">Cổ Điển Đen</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Advanced Styling Accordion -->
+            <div class="accordion">
+                
+                <!-- Colors & Gradients -->
+                <div class="sub-card">
+                    <div class="sub-card-title">
+                        <span>🌈</span> Tùy biến màu sắc
+                    </div>
+                    
+                    <div class="color-controls">
+                        <div class="color-item">
+                            <input type="color" id="qr-color-1" value="#4f46e5" onchange="updateQR()">
+                            <span>Màu chính</span>
+                        </div>
+                        <div class="color-item" id="color-2-box">
+                            <input type="color" id="qr-color-2" value="#9333ea" onchange="updateQR()">
+                            <span>Màu Gradient 2</span>
+                        </div>
+                        <div class="color-item">
+                            <input type="color" id="qr-bg-color" value="#ffffff" onchange="updateQR()">
+                            <span>Màu nền QR</span>
+                        </div>
+                    </div>
+
+                    <div class="toggle-row" style="margin-top: 6px;">
+                        <span style="font-size: 13px; color: var(--text-muted);">Sử dụng màu chuyển sắc (Gradient)</span>
+                        <label class="switch">
+                            <input type="checkbox" id="use-gradient" checked onchange="toggleGradientMode()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-row">
+                        <span style="font-size: 13px; color: var(--text-muted);">Nền trong suốt (Transparent Background)</span>
+                        <label class="switch">
+                            <input type="checkbox" id="transparent-bg" onchange="updateQR()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Patterns & Dots Style -->
+                <div class="sub-card">
+                    <div class="sub-card-title">
+                        <span>✨</span> Kiểu dáng hạt & Góc định vị
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Kiểu hạt điểm (Dots Pattern)</label>
+                        <div class="pill-group" id="dots-style-group">
+                            <button class="pill-btn active" onclick="setDotStyle('rounded')">Bo tròn (Rounded)</button>
+                            <button class="pill-btn" onclick="setDotStyle('dots')">Chấm bi (Dots)</button>
+                            <button class="pill-btn" onclick="setDotStyle('classy-rounded')">Sang trọng (Classy)</button>
+                            <button class="pill-btn" onclick="setDotStyle('square')">Vuông truyền thống</button>
+                            <button class="pill-btn" onclick="setDotStyle('extra-rounded')">Cực tròn</button>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Kiểu góc khung (Corner Square)</label>
+                            <select id="corner-square-style" onchange="updateQR()">
+                                <option value="extra-rounded">Bo tròn mềm</option>
+                                <option value="dot">Vòng tròn</option>
+                                <option value="square">Vuông góc</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Kiểu tâm góc (Corner Dot)</label>
+                            <select id="corner-dot-style" onchange="updateQR()">
+                                <option value="dot">Chấm tròn</option>
+                                <option value="square">Vuông</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logo & Icon -->
+                <div class="sub-card">
+                    <div class="sub-card-title">
+                        <span>🖼️</span> Chèn Logo vào giữa mã QR
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Tải ảnh logo từ máy tính (PNG/JPG/SVG)</label>
+                        <input type="file" id="logo-file-input" accept="image/*" onchange="handleLogoUpload(event)">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Hoặc chọn nhanh biểu tượng phổ biến:</label>
+                        <div class="logo-presets">
+                            <button class="logo-pill" onclick="setPresetLogo('none')">❌ Không logo</button>
+                            <button class="logo-pill" onclick="setPresetLogo('wifi')">📶 Wi-Fi</button>
+                            <button class="logo-pill" onclick="setPresetLogo('link')">🔗 Link</button>
+                            <button class="logo-pill" onclick="setPresetLogo('bank')">💳 Ngân hàng</button>
+                            <button class="logo-pill" onclick="setPresetLogo('facebook')">📘 Facebook</button>
+                            <button class="logo-pill" onclick="setPresetLogo('tiktok')">🎵 TikTok</button>
+                            <button class="logo-pill" onclick="setPresetLogo('zalo')">💬 Zalo</button>
+                        </div>
+                    </div>
+
+                    <div class="form-row" id="logo-adjustments" style="margin-top: 8px;">
+                        <div class="form-group">
+                            <label>Kích cỡ Logo: <span id="logo-size-val">30%</span></label>
+                            <input type="range" id="logo-size" min="0.15" max="0.4" step="0.05" value="0.3" oninput="updateLogoSize(this.value)">
+                        </div>
+                        <div class="form-group">
+                            <label>Khoảng đệm (Margin): <span id="logo-margin-val">4px</span></label>
+                            <input type="range" id="logo-margin" min="0" max="15" step="1" value="4" oninput="updateLogoMargin(this.value)">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Frame & Call To Action -->
+                <div class="sub-card">
+                    <div class="sub-card-title">
+                        <span>🏷️</span> Khung viền & Thông điệp
+                    </div>
+                    <div class="pill-group">
+                        <button class="pill-btn active" onclick="setFrameStyle('none')">Không viền</button>
+                        <button class="pill-btn" onclick="setFrameStyle('scanme')">Khung 'SCAN ME'</button>
+                        <button class="pill-btn" onclick="setFrameStyle('badge')">Khung viền viền nét đứt</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Right: Live Preview, Export & History Panel -->
+        <div class="panel preview-panel">
+            
+            <div class="section-header" style="width: 100%;">
+                <div class="section-title">
+                    <span>👁️</span> Xem trước trực tiếp
+                </div>
+                <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="resetToDefaults()">
+                    🔄 Làm mới
+                </button>
+            </div>
+
+            <!-- QR Container for live rendering -->
+            <div class="qr-display-container" id="qr-container">
+                <div id="qr-canvas-wrapper"></div>
+            </div>
+
+            <!-- Resolution & Format selector -->
+            <div class="form-group" style="width: 100%; margin-bottom: 16px;">
+                <label>Độ phân giải tải xuống</label>
+                <select id="export-size">
+                    <option value="500">Tiêu chuẩn - 500 x 500 px (Web, MXH)</option>
+                    <option value="1000" selected>Chất lượng cao - 1000 x 1000 px (Rõ nét)</option>
+                    <option value="2000">Ultra HD in ấn - 2000 x 2000 px (Banner, Standee)</option>
+                </select>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="downloadQRCode('png')">
+                    <span>📥</span> Tải ảnh PNG chất lượng cao
+                </button>
+                <button class="btn btn-secondary" onclick="downloadQRCode('svg')">
+                    <span>📐</span> Tải Vector SVG
+                </button>
+                <button class="btn btn-secondary" onclick="copyQRToClipboard()">
+                    <span>📋</span> Copy vào bộ nhớ
+                </button>
+            </div>
+
+            <!-- Recent History -->
+            <div class="history-box">
+                <div class="section-header" style="padding-top: 18px;">
+                    <div class="section-title" style="font-size: 14px;">
+                        <span>⏱️</span> Lịch sử mã vừa tạo
+                    </div>
+                    <button style="background: none; border: none; color: var(--text-muted); font-size: 11px; cursor: pointer;" onclick="clearHistory()">Xóa lịch sử</button>
+                </div>
+                <div class="history-list" id="history-list">
+                    <div style="font-size: 12px; color: var(--text-muted); text-align: center; padding: 12px;">Chưa có mã nào được lưu.</div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast">
+        <span id="toast-icon">✅</span>
+        <span id="toast-message">Đã sao chép thành công!</span>
+    </div>
+
+    <!-- Application Script -->
+    <script>
+        // Preset vector icons as SVG Data URLs for reliable center logo embedding
+        const PRESET_LOGOS = {
+            wifi: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%234f46e5"><path d="M12 18a2 2 0 100 4 2 2 0 000-4zm-4.95-3.05a7 7 0 019.9 0l1.41-1.42a9 9 0 00-12.72 0l1.41 1.42zm-2.83-2.83a11 11 0 0115.56 0l1.41-1.42a13 13 0 00-18.38 0l1.41 1.42zM1.41 7.88a15 15 0 0121.18 0l1.41-1.42a17 17 0 00-24 0l1.41 1.42z"/></svg>',
+            link: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%230ea5e9"><path d="M13.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L17.586 11H4a1 1 0 110-2h13.586l-4.293-4.293a1 1 0 010-1.414z"/></svg>',
+            bank: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23059669"><path d="M2 10h20v2H2zm2-7l8-4 8 4v2H4zm1 9h2v7H5zm5 0h2v7h-2zm5 0h2v7h-2zm-9 9h16v2H2z"/></svg>',
+            facebook: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%231877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>',
+            tiktok: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23000000"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 2.89 3.5 2.72 1.35-.07 2.55-.98 2.92-2.27.18-.54.22-1.12.22-1.69V.02z"/></svg>',
+            zalo: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%230068FF"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.92.54 3.71 1.48 5.24L2 22l4.89-1.45C8.36 21.49 10.12 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm1 14h-3v-2h2.2l-2.2-3.2V9h3v2h-2.2l2.2 3.2V16z"/></svg>'
+        };
+
+        // Bank list for VietQR
+        const BANKS = [
+            { code: 'VCB', name: 'Vietcombank' },
+            { code: 'MB', name: 'MB Bank' },
+            { code: 'TCB', name: 'Techcombank' },
+            { code: 'VPB', name: 'VPBank' },
+            { code: 'ACB', name: 'ACB' },
+            { code: 'BIDV', name: 'BIDV' },
+            { code: 'VIB', name: 'VIB' },
+            { code: 'TPB', name: 'TPBank' },
+            { code: 'CTG', name: 'VietinBank' },
+            { code: 'VBA', name: 'Agribank' },
+            { code: 'STB', name: 'Sacombank' },
+            { code: 'MSB', name: 'MSB' },
+            { code: 'OCB', name: 'OCB' },
+            { code: 'SHB', name: 'SHB' }
+        ];
+
+        // State
+        let currentType = 'url';
+        let currentDotStyle = 'rounded';
+        let customLogo = '';
+        let qrCodeInstance = null;
+        let qrHistory = JSON.parse(localStorage.getItem('qr_history_pro') || '[]');
+
+        // Initialize QR instance with default configuration
+        function initQRCode() {
+            qrCodeInstance = new QRCodeStyling({
+                width: 240,
+                height: 240,
+                type: 'canvas',
+                data: 'https://example.com',
+                image: '',
+                dotsOptions: {
+                    color: '#4f46e5',
+                    type: 'rounded',
+                    gradient: {
+                        type: 'linear',
+                        rotation: 45,
+                        colorStops: [
+                            { offset: 0, color: '#4f46e5' },
+                            { offset: 1, color: '#9333ea' }
+                        ]
+                    }
+                },
+                backgroundOptions: {
+                    color: '#ffffff'
+                },
+                imageOptions: {
+                    crossOrigin: 'anonymous',
+                    margin: 4,
+                    imageSize: 0.3
+                },
+                cornersSquareOptions: {
+                    type: 'extra-rounded',
+                    color: '#4f46e5'
+                },
+                cornersDotOptions: {
+                    type: 'dot',
+                    color: '#4f46e5'
+                },
+                qrOptions: {
+                    errorCorrectionLevel: 'H'
+                }
+            });
+
+            const wrapper = document.getElementById('qr-canvas-wrapper');
+            wrapper.innerHTML = '';
+            qrCodeInstance.append(wrapper);
+        }
+
+        // Switch Content Type
+        function switchType(type) {
+            currentType = type;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event?.currentTarget?.classList.add('active');
+
+            const container = document.getElementById('form-container');
+            let html = '';
+
+            switch (type) {
+                case 'url':
+                    html = `
+                        <div class="form-group">
+                            <label>Địa chỉ Website / Đường link (URL)</label>
+                            <input type="text" id="input-url" placeholder="https://example.com" value="https://google.com" oninput="updateQR()">
+                        </div>
+                    `;
+                    break;
+                case 'wifi':
+                    html = `
+                        <div class="form-group">
+                            <label>Tên mạng Wi-Fi (SSID)</label>
+                            <input type="text" id="wifi-ssid" placeholder="Nhập tên Wi-Fi..." value="Coffee_Free_WiFi" oninput="updateQR()">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Mật khẩu Wi-Fi</label>
+                                <input type="text" id="wifi-pass" placeholder="Nhập mật khẩu..." value="88888888" oninput="updateQR()">
+                            </div>
+                            <div class="form-group">
+                                <label>Bảo mật</label>
+                                <select id="wifi-type" onchange="updateQR()">
+                                    <option value="WPA">WPA / WPA2 (Phổ biến)</option>
+                                    <option value="WEP">WEP</option>
+                                    <option value="nopass">Không mật khẩu</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="toggle-row" style="margin-top: 4px;">
+                            <span style="font-size: 13px; color: var(--text-muted);">Mạng Wi-Fi ẩn</span>
+                            <label class="switch">
+                                <input type="checkbox" id="wifi-hidden" onchange="updateQR()">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    `;
+                    break;
+                case 'vcard':
+                    html = `
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Họ và Tên (*)</label>
+                                <input type="text" id="vcard-name" placeholder="Nguyễn Văn A" value="Nguyễn Văn A" oninput="updateQR()">
+                            </div>
+                            <div class="form-group">
+                                <label>Số điện thoại (*)</label>
+                                <input type="tel" id="vcard-phone" placeholder="0901234567" value="0901234567" oninput="updateQR()">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="vcard-email" placeholder="contact@example.com" value="contact@example.com" oninput="updateQR()">
+                            </div>
+                            <div class="form-group">
+                                <label>Công ty / Tổ chức</label>
+                                <input type="text" id="vcard-company" placeholder="Tên công ty" value="Tech Studio" oninput="updateQR()">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Chức vụ</label>
+                                <input type="text" id="vcard-role" placeholder="Giám đốc, Kỹ sư..." value="Founder" oninput="updateQR()">
+                            </div>
+                            <div class="form-group">
+                                <label>Website</label>
+                                <input type="text" id="vcard-web" placeholder="https://..." value="https://example.com" oninput="updateQR()">
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 'vietqr':
+                    const bankOptions = BANKS.map(b => `<option value="${b.code}">${b.name} (${b.code})</option>`).join('');
+                    html = `
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Ngân hàng thụ hưởng</label>
+                                <select id="bank-code" onchange="updateQR()">
+                                    ${bankOptions}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Số tài khoản (*)</label>
+                                <input type="text" id="bank-acc" placeholder="Nhập STK..." value="123456789" oninput="updateQR()">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Số tiền (VNĐ - Tùy chọn)</label>
+                                <input type="number" id="bank-amount" placeholder="VD: 50000" oninput="updateQR()">
+                            </div>
+                            <div class="form-group">
+                                <label>Tên chủ tài khoản</label>
+                                <input type="text" id="bank-name" placeholder="NGUYEN VAN A" oninput="updateQR()">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Nội dung chuyển khoản</label>
+                            <input type="text" id="bank-memo" placeholder="Thanh toan don hang..." oninput="updateQR()">
+                        </div>
+                    `;
+                    break;
+                case 'text':
+                    html = `
+                        <div class="form-group">
+                            <label>Nội dung văn bản thuần</label>
+                            <textarea id="input-text" placeholder="Nhập đoạn văn bản hoặc ghi chú..." oninput="updateQR()">Xin chào! Đây là mã QR văn bản được tạo từ QR Studio Pro.</textarea>
+                        </div>
+                    `;
+                    break;
+                case 'email':
+                    html = `
+                        <div class="form-group">
+                            <label>Địa chỉ Email nhận</label>
+                            <input type="email" id="email-to" placeholder="support@domain.com" value="support@example.com" oninput="updateQR()">
+                        </div>
+                        <div class="form-group">
+                            <label>Tiêu đề thư</label>
+                            <input type="text" id="email-subject" placeholder="Tiêu đề..." value="Liên hệ hợp tác" oninput="updateQR()">
+                        </div>
+                        <div class="form-group">
+                            <label>Nội dung thư</label>
+                            <textarea id="email-body" placeholder="Nội dung gửi sẵn..." oninput="updateQR()">Xin chào, tôi muốn tìm hiểu thêm về dịch vụ.</textarea>
+                        </div>
+                    `;
+                    break;
+                case 'phone':
+                    html = `
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Chế độ</label>
+                                <select id="phone-mode" onchange="updateQR()">
+                                    <option value="call">Gọi điện trực tiếp (Tel)</option>
+                                    <option value="sms">Gửi tin nhắn (SMS)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Số điện thoại</label>
+                                <input type="tel" id="phone-number" placeholder="0901234567" value="0987654321" oninput="updateQR()">
+                            </div>
+                        </div>
+                        <div class="form-group" id="sms-body-group" style="display:none;">
+                            <label>Nội dung tin nhắn SMS</label>
+                            <input type="text" id="sms-msg" placeholder="Nội dung nhắn..." value="Xin chào!" oninput="updateQR()">
+                        </div>
+                    `;
+                    break;
+            }
+
+            container.innerHTML = html;
+
+            // Handle phone mode toggle
+            const phoneMode = document.getElementById('phone-mode');
+            if (phoneMode) {
+                phoneMode.addEventListener('change', (e) => {
+                    const smsGroup = document.getElementById('sms-body-group');
+                    if (smsGroup) smsGroup.style.display = e.target.value === 'sms' ? 'block' : 'none';
+                });
+            }
+
+            updateQR();
+        }
+
+        // Generate QR Payload String
+        function getQRDataPayload() {
+            switch (currentType) {
+                case 'url':
+                    return document.getElementById('input-url')?.value.trim() || 'https://google.com';
+                case 'wifi':
+                    const ssid = document.getElementById('wifi-ssid')?.value.trim() || '';
+                    const pass = document.getElementById('wifi-pass')?.value.trim() || '';
+                    const type = document.getElementById('wifi-type')?.value || 'WPA';
+                    const hidden = document.getElementById('wifi-hidden')?.checked ? 'true' : 'false';
+                    return `WIFI:S:${ssid};T:${type};P:${pass};H:${hidden};;`;
+                case 'vcard':
+                    const name = document.getElementById('vcard-name')?.value.trim() || '';
+                    const phone = document.getElementById('vcard-phone')?.value.trim() || '';
+                    const email = document.getElementById('vcard-email')?.value.trim() || '';
+                    const company = document.getElementById('vcard-company')?.value.trim() || '';
+                    const role = document.getElementById('vcard-role')?.value.trim() || '';
+                    const web = document.getElementById('vcard-web')?.value.trim() || '';
+                    return `BEGIN:VCARD\nVERSION:3.0\nN:${name}\nFN:${name}\nORG:${company}\nTITLE:${role}\nTEL:${phone}\nEMAIL:${email}\nURL:${web}\nEND:VCARD`;
+                case 'vietqr':
+                    const bank = document.getElementById('bank-code')?.value || 'VCB';
+                    const acc = document.getElementById('bank-acc')?.value.trim() || '';
+                    const amount = document.getElementById('bank-amount')?.value.trim() || '';
+                    const memo = encodeURIComponent(document.getElementById('bank-memo')?.value.trim() || '');
+                    const accName = encodeURIComponent(document.getElementById('bank-name')?.value.trim() || '');
+                    return `https://img.vietqr.io/image/${bank}-${acc}-compact2.png?amount=${amount}&addInfo=${memo}&accountName=${accName}`;
+                case 'text':
+                    return document.getElementById('input-text')?.value || '';
+                case 'email':
+                    const to = document.getElementById('email-to')?.value.trim() || '';
+                    const sub = encodeURIComponent(document.getElementById('email-subject')?.value.trim() || '');
+                    const body = encodeURIComponent(document.getElementById('email-body')?.value.trim() || '');
+                    return `mailto:${to}?subject=${sub}&body=${body}`;
+                case 'phone':
+                    const mode = document.getElementById('phone-mode')?.value || 'call';
+                    const pNum = document.getElementById('phone-number')?.value.trim() || '';
+                    const pMsg = document.getElementById('sms-msg')?.value.trim() || '';
+                    return mode === 'call' ? `tel:${pNum}` : `SMSTO:${pNum}:${pMsg}`;
+                default:
+                    return 'https://example.com';
+            }
+        }
+
+        // Update Live QR Code
+        function updateQR() {
+            if (!qrCodeInstance) return;
+
+            const payload = getQRDataPayload();
+            const color1 = document.getElementById('qr-color-1')?.value || '#4f46e5';
+            const color2 = document.getElementById('qr-color-2')?.value || '#9333ea';
+            const useGradient = document.getElementById('use-gradient')?.checked ?? true;
+            const isTransparent = document.getElementById('transparent-bg')?.checked ?? false;
+            const bgColor = isTransparent ? 'transparent' : (document.getElementById('qr-bg-color')?.value || '#ffffff');
+
+            const cornerSquareStyle = document.getElementById('corner-square-style')?.value || 'extra-rounded';
+            const cornerDotStyle = document.getElementById('corner-dot-style')?.value || 'dot';
+            const logoSize = parseFloat(document.getElementById('logo-size')?.value || '0.3');
+            const logoMargin = parseInt(document.getElementById('logo-margin')?.value || '4');
+
+            const options = {
+                data: payload || 'https://example.com',
+                image: customLogo,
+                dotsOptions: {
+                    type: currentDotStyle,
+                    color: color1,
+                    gradient: useGradient ? {
+                        type: 'linear',
+                        rotation: 45,
+                        colorStops: [
+                            { offset: 0, color: color1 },
+                            { offset: 1, color: color2 }
+                        ]
+                    } : null
+                },
+                backgroundOptions: {
+                    color: bgColor
+                },
+                cornersSquareOptions: {
+                    type: cornerSquareStyle,
+                    color: color1
+                },
+                cornersDotOptions: {
+                    type: cornerDotStyle,
+                    color: color1
+                },
+                imageOptions: {
+                    crossOrigin: 'anonymous',
+                    margin: logoMargin,
+                    imageSize: logoSize
+                }
+            };
+
+            qrCodeInstance.update(options);
+        }
+
+        // Toggle Gradient UI
+        function toggleGradientMode() {
+            const useGradient = document.getElementById('use-gradient').checked;
+            document.getElementById('color-2-box').style.display = useGradient ? 'flex' : 'none';
+            updateQR();
+        }
+
+        // Dot Style selection
+        function setDotStyle(style) {
+            currentDotStyle = style;
+            document.querySelectorAll('#dots-style-group .pill-btn').forEach(b => b.classList.remove('active'));
+            event?.currentTarget?.classList.add('active');
+            updateQR();
+        }
+
+        // Logo Upload Handling
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                customLogo = e.target.result;
+                updateQR();
+                showToast("Đã tải logo thành công!");
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Set Preset Logos
+        function setPresetLogo(name) {
+            document.querySelectorAll('.logo-pill').forEach(b => b.classList.remove('active'));
+            event?.currentTarget?.classList.add('active');
+
+            if (name === 'none') {
+                customLogo = '';
+                document.getElementById('logo-file-input').value = '';
+            } else {
+                customLogo = PRESET_LOGOS[name] || '';
+            }
+            updateQR();
+        }
+
+        function updateLogoSize(val) {
+            document.getElementById('logo-size-val').innerText = Math.round(val * 100) + '%';
+            updateQR();
+        }
+
+        function updateLogoMargin(val) {
+            document.getElementById('logo-margin-val').innerText = val + 'px';
+            updateQR();
+        }
+
+        // Frame selection
+        function setFrameStyle(style) {
+            document.querySelectorAll('.sub-card:last-child .pill-btn').forEach(b => b.classList.remove('active'));
+            event?.currentTarget?.classList.add('active');
+
+            const container = document.getElementById('qr-container');
+            container.className = 'qr-display-container';
+            if (style === 'scanme') container.classList.add('frame-scanme');
+            if (style === 'badge') container.classList.add('frame-badge');
+        }
+
+        // Quick Theme Presets
+        function applyTheme(theme) {
+            document.querySelectorAll('.preset-card').forEach(c => c.classList.remove('active'));
+            event?.currentTarget?.classList.add('active');
+
+            const gradCheckbox = document.getElementById('use-gradient');
+            const c1 = document.getElementById('qr-color-1');
+            const c2 = document.getElementById('qr-color-2');
+            const bg = document.getElementById('qr-bg-color');
+
+            switch (theme) {
+                case 'modern-indigo':
+                    c1.value = '#4f46e5';
+                    c2.value = '#9333ea';
+                    bg.value = '#ffffff';
+                    gradCheckbox.checked = true;
+                    break;
+                case 'ocean-cyan':
+                    c1.value = '#0ea5e9';
+                    c2.value = '#10b981';
+                    bg.value = '#ffffff';
+                    gradCheckbox.checked = true;
+                    break;
+                case 'sunset-fire':
+                    c1.value = '#f97316';
+                    c2.value = '#ef4444';
+                    bg.value = '#ffffff';
+                    gradCheckbox.checked = true;
+                    break;
+                case 'emerald-pro':
+                    c1.value = '#059669';
+                    c2.value = '#059669';
+                    bg.value = '#ffffff';
+                    gradCheckbox.checked = false;
+                    break;
+                case 'classic-dark':
+                    c1.value = '#0f172a';
+                    c2.value = '#0f172a';
+                    bg.value = '#ffffff';
+                    gradCheckbox.checked = false;
+                    break;
+            }
+
+            toggleGradientMode();
+            updateQR();
+            showToast("Đã áp dụng giao diện!");
+        }
+
+        // Reset to initial defaults
+        function resetToDefaults() {
+            customLogo = '';
+            document.getElementById('logo-file-input').value = '';
+            document.getElementById('qr-color-1').value = '#4f46e5';
+            document.getElementById('qr-color-2').value = '#9333ea';
+            document.getElementById('qr-bg-color').value = '#ffffff';
+            document.getElementById('use-gradient').checked = true;
+            document.getElementById('transparent-bg').checked = false;
+            document.getElementById('corner-square-style').value = 'extra-rounded';
+            document.getElementById('corner-dot-style').value = 'dot';
+            setFrameStyle('none');
+            switchType(currentType);
+            showToast("Đã làm mới cài đặt!");
+        }
+
+        // Download QR Code with selected resolution
+        async function downloadQRCode(extension) {
+            const size = parseInt(document.getElementById('export-size').value) || 1000;
+            
+            // Save to history before downloading
+            saveToHistory();
+
+            // Create temporary high-resolution export instance
+            const payload = getQRDataPayload();
+            const color1 = document.getElementById('qr-color-1').value;
+            const color2 = document.getElementById('qr-color-2').value;
+            const useGradient = document.getElementById('use-gradient').checked;
+            const isTransparent = document.getElementById('transparent-bg').checked;
+            const bgColor = isTransparent ? 'transparent' : document.getElementById('qr-bg-color').value;
+            const cornerSquareStyle = document.getElementById('corner-square-style').value;
+            const cornerDotStyle = document.getElementById('corner-dot-style').value;
+            const logoSize = parseFloat(document.getElementById('logo-size').value);
+            const logoMargin = parseInt(document.getElementById('logo-margin').value);
+
+            const exportInstance = new QRCodeStyling({
+                width: size,
+                height: size,
+                type: extension === 'svg' ? 'svg' : 'canvas',
+                data: payload || 'https://example.com',
+                image: customLogo,
+                dotsOptions: {
+                    type: currentDotStyle,
+                    color: color1,
+                    gradient: useGradient ? {
+                        type: 'linear',
+                        rotation: 45,
+                        colorStops: [
+                            { offset: 0, color: color1 },
+                            { offset: 1, color: color2 }
+                        ]
+                    } : null
+                },
+                backgroundOptions: {
+                    color: bgColor
+                },
+                cornersSquareOptions: {
+                    type: cornerSquareStyle,
+                    color: color1
+                },
+                cornersDotOptions: {
+                    type: cornerDotStyle,
+                    color: color1
+                },
+                imageOptions: {
+                    crossOrigin: 'anonymous',
+                    margin: logoMargin * (size / 240),
+                    imageSize: logoSize
+                }
+            });
+
+            await exportInstance.download({
+                name: `qr-studio-pro-${Date.now()}`,
+                extension: extension
+            });
+
+            showToast(`Đã tải xuống mã QR (${extension.toUpperCase()}) thành công!`);
+        }
+
+        // Copy QR Canvas directly to system clipboard
+        async function copyQRToClipboard() {
+            try {
+                const canvas = document.querySelector('#qr-canvas-wrapper canvas');
+                if (!canvas) throw new Error("Chưa có canvas để copy");
+
+                canvas.toBlob(async (blob) => {
+                    const item = new ClipboardItem({ 'image/png': blob });
+                    await navigator.clipboard.write([item]);
+                    showToast("Đã copy hình ảnh QR vào Clipboard!");
+                });
+            } catch (err) {
+                console.error(err);
+                showToast("Không thể copy tự động, vui lòng tải ảnh về!");
+            }
+        }
+
+        // History Management
+        function saveToHistory() {
+            const payload = getQRDataPayload();
+            if (!payload) return;
+
+            const historyItem = {
+                id: Date.now(),
+                type: currentType,
+                title: payload.length > 30 ? payload.substring(0, 30) + '...' : payload,
+                time: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+            };
+
+            qrHistory.unshift(historyItem);
+            if (qrHistory.length > 10) qrHistory.pop();
+            localStorage.setItem('qr_history_pro', JSON.stringify(qrHistory));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const list = document.getElementById('history-list');
+            if (!qrHistory.length) {
+                list.innerHTML = `<div style="font-size: 12px; color: var(--text-muted); text-align: center; padding: 12px;">Chưa có mã nào được lưu.</div>`;
+                return;
+            }
+
+            list.innerHTML = qrHistory.map(item => `
+                <div class="history-item" onclick="loadHistoryItem('${encodeURIComponent(item.title)}')">
+                    <div class="history-info">
+                        <span>🏷️</span>
+                        <span>[${item.type.toUpperCase()}] ${item.title}</span>
+                    </div>
+                    <span style="color: var(--text-muted); font-size: 11px;">${item.time}</span>
+                </div>
+            `).join('');
+        }
+
+        function clearHistory() {
+            qrHistory = [];
+            localStorage.removeItem('qr_history_pro');
+            renderHistory();
+            showToast("Đã xóa toàn bộ lịch sử!");
+        }
+
+        function loadHistoryItem(text) {
+            showToast("Đã chọn từ lịch sử!");
+        }
+
+        // Toast Helper
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2800);
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            initQRCode();
+            switchType('url');
+            renderHistory();
+        });
+    </script>
+</body>
+
+</html>
