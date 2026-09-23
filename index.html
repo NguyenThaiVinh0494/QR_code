@@ -23,7 +23,13 @@
                 <p>Trình tạo & tùy biến mã QR cao cấp</p>
             </div>
         </div>
-        <div class="badge-pro">Phiên bản 2.0 Pro</div>
+        <div class="header-actions">
+            <button class="theme-toggle-btn" id="theme-toggle-btn" onclick="toggleTheme()" title="Chuyển đổi giao diện Sáng / Tối">
+                <span id="theme-icon">🌙</span>
+                <span id="theme-label">Chế độ tối</span>
+            </button>
+            <div class="badge-pro">Phiên bản 2.0 Pro</div>
+        </div>
     </header>
 
     <!-- Main Studio -->
@@ -913,8 +919,38 @@
             setTimeout(() => toast.classList.remove('show'), 2800);
         }
 
+        // Theme Management (Light / Dark Mode)
+        function initTheme() {
+            const savedTheme = localStorage.getItem('qr_studio_theme') || 'light';
+            applyThemeMode(savedTheme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyThemeMode(nextTheme);
+            localStorage.setItem('qr_studio_theme', nextTheme);
+            showToast(nextTheme === 'dark' ? '🌙 Đã chuyển sang giao diện Tối' : '☀️ Đã chuyển sang giao diện Sáng');
+        }
+
+        function applyThemeMode(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            const icon = document.getElementById('theme-icon');
+            const label = document.getElementById('theme-label');
+            if (icon && label) {
+                if (theme === 'dark') {
+                    icon.innerText = '☀️';
+                    label.innerText = 'Chế độ sáng';
+                } else {
+                    icon.innerText = '🌙';
+                    label.innerText = 'Chế độ tối';
+                }
+            }
+        }
+
         // Initialize on page load
         window.addEventListener('DOMContentLoaded', () => {
+            initTheme();
             initQRCode();
             switchType('url');
             renderHistory();

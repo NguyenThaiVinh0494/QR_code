@@ -10,11 +10,44 @@
     --border-focus: #6366f1;
     --text-main: #0f172a;
     --text-muted: #64748b;
+    --input-bg: #ffffff;
+    --subcard-bg: #f8fafc;
+    --header-bg: rgba(255, 255, 255, 0.85);
+    --logo-gradient: linear-gradient(135deg, #0f172a, #4338ca);
+    --panel-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+    --qr-card-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08), 0 0 20px rgba(99, 102, 241, 0.06);
+    --bg-glow-1: rgba(99, 102, 241, 0.08);
+    --bg-glow-2: rgba(236, 72, 153, 0.06);
+    --bg-glow-3: rgba(168, 85, 247, 0.04);
     --accent-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%);
     --radius-xl: 20px;
     --radius-lg: 14px;
     --radius-md: 10px;
     --radius-sm: 6px;
+}
+
+[data-theme="dark"] {
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
+    --primary-light: rgba(99, 102, 241, 0.15);
+    --bg-body: #0f172a;
+    --surface: #1e293b;
+    --surface-card: rgba(30, 41, 59, 0.75);
+    --surface-hover: #334155;
+    --border: rgba(255, 255, 255, 0.1);
+    --border-focus: #818cf8;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --input-bg: rgba(15, 23, 42, 0.65);
+    --subcard-bg: rgba(15, 23, 42, 0.45);
+    --header-bg: rgba(15, 23, 42, 0.85);
+    --logo-gradient: linear-gradient(135deg, #ffffff, #cbd5e1);
+    --panel-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+    --qr-card-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 30px rgba(99, 102, 241, 0.15);
+    --bg-glow-1: rgba(99, 102, 241, 0.18);
+    --bg-glow-2: rgba(236, 72, 153, 0.15);
+    --bg-glow-3: rgba(168, 85, 247, 0.08);
+    --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
 }
 
 * {
@@ -32,25 +65,27 @@ body {
     display: flex;
     flex-direction: column;
     background-image: 
-        radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 85% 85%, rgba(236, 72, 153, 0.06) 0%, transparent 40%),
-        radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.04) 0%, transparent 60%);
+        radial-gradient(circle at 15% 15%, var(--bg-glow-1) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, var(--bg-glow-2) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, var(--bg-glow-3) 0%, transparent 60%);
     background-attachment: fixed;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Header */
 header {
-    padding: 20px 32px;
+    padding: 16px 32px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid var(--border);
     backdrop-filter: blur(16px);
-    background: rgba(255, 255, 255, 0.85);
+    background: var(--header-bg);
     position: sticky;
     top: 0;
     z-index: 50;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+    transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .logo-box {
@@ -75,7 +110,7 @@ header {
 .logo-text h1 {
     font-size: 20px;
     font-weight: 800;
-    background: linear-gradient(135deg, #0f172a, #4338ca);
+    background: var(--logo-gradient);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -88,11 +123,39 @@ header {
     font-weight: 500;
 }
 
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.theme-toggle-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-main);
+    padding: 7px 14px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.theme-toggle-btn:hover {
+    background: var(--surface-hover);
+    border-color: var(--border-focus);
+    transform: translateY(-1px);
+}
+
 .badge-pro {
     background: var(--accent-gradient);
     font-size: 11px;
     font-weight: 700;
-    padding: 4px 10px;
+    padding: 5px 12px;
     border-radius: 20px;
     color: white;
     text-transform: uppercase;
@@ -124,10 +187,11 @@ header {
     border: 1px solid var(--border);
     border-radius: var(--radius-xl);
     padding: 24px;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+    box-shadow: var(--panel-shadow);
     display: flex;
     flex-direction: column;
     gap: 24px;
+    transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Section Title */
@@ -178,7 +242,7 @@ header {
 .tab-btn:hover {
     color: var(--text-main);
     background: var(--surface-hover);
-    border-color: #cbd5e1;
+    border-color: var(--border-focus);
     transform: translateY(-2px);
 }
 
@@ -225,7 +289,7 @@ input[type="tel"],
 textarea,
 select {
     width: 100%;
-    background: #ffffff;
+    background: var(--input-bg);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     padding: 12px 14px;
@@ -238,7 +302,7 @@ select {
 input:focus, textarea:focus, select:focus {
     border-color: var(--border-focus);
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
-    background: #ffffff;
+    background: var(--input-bg);
 }
 
 textarea {
@@ -254,13 +318,14 @@ textarea {
 }
 
 .sub-card {
-    background: #f8fafc;
+    background: var(--subcard-bg);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     padding: 18px;
     display: flex;
     flex-direction: column;
     gap: 16px;
+    transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .sub-card-title {
@@ -430,7 +495,7 @@ input[type="color"]::-webkit-color-swatch {
     background: #ffffff;
     border-radius: 20px;
     padding: 24px;
-    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08), 0 0 20px rgba(99, 102, 241, 0.06);
+    box-shadow: var(--qr-card-shadow);
     border: 1px solid var(--border);
     display: flex;
     flex-direction: column;
@@ -514,14 +579,14 @@ input[type="color"]::-webkit-color-swatch {
 }
 
 .btn-secondary {
-    background: #ffffff;
+    background: var(--surface);
     color: var(--text-main);
     border: 1px solid var(--border);
 }
 
 .btn-secondary:hover {
     background: var(--surface-hover);
-    border-color: #cbd5e1;
+    border-color: var(--border-focus);
     transform: translateY(-2px);
 }
 
